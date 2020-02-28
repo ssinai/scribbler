@@ -1,0 +1,82 @@
+// Chapter 17
+
+#stdev (prop, n) {
+	return sqrt (prop * (1-prop) / n);
+}
+
+// Example 17.1
+
+prop = .15; n=100;
+sigma_bar = stdev (prop, n)>>0.0357;
+c = 18 / n>>0.18;
+z = zscore (c, prop, sigma_bar)>>0.8402;
+alphagt (z)>>0.2004;
+
+
+
+// Chapter 17.2
+prop = .75; n = 125;
+sigma_bar = stdev (prop, n)>>0.0387;
+z=prob2z (.5-.1)>>1.2816;
+c=prop-z*sigma_bar>>0.7004;
+osp=87/n>>0.696; // osp < c, so reject
+
+
+z = zscore (osp, prop, sigma_bar)>>-1.3943;
+p= z2prob (z)>>0.4184;
+p_value=.5+p>>0.9184;
+
+
+// Example 17.3 a
+prop = .28; n=500;
+sigma_bar = stdev (prop, n)>>0.0201;
+prob2z (.5-.025)>>1.96;
+interval = cint (z, .28, sigma_bar)>>[0.308, 0.252];   // interval
+osp = 151 / 500>>0.302;  // osp inside interval, so cannot reject
+
+between (interval, osp)>>true;
+between (interval, .5)>>false;
+
+
+// Example 17.3 b
+z = zscore (osp, prop, sigma_bar)>>1.0956;
+p=z2prob (1.09)>>0.3621; // book value
+2 * (.5-p)>>0.2757;  // book value
+p=z2prob (z)>>0.3634;
+2 * (.5-p)>>0.2732;
+
+
+// Example 17.4 a
+prop = .09; n=3000;
+sigma_bar = stdev (prop, n)>>0.0052;
+z= (.08-prop) / sigma_bar>>-1.9139;
+alphalt (z)>>0.0278;
+
+
+//Example 17.4 b
+prop = .085;
+z=zscore (prop, .08, sigma_bar)>>0.9569;
+betalt (z)>>0.1693;
+betalt (zscore (prop, .08, sigma_bar))>>0.1693;
+
+
+// Example 17.4 c
+z = zscore (.08, .075, sigma_bar)>>0.9569;
+betalt (z)>>0.1693;
+betalt (zscore (.08, .075, sigma_bar))>>0.1693;
+
+
+// Example 17.5
+prop=.07; n=200; alpha=.01; // book got alpha wrong.  alpha not .1, but .01
+sigma_bar = stdev (prop, n)>>0.018;
+z=prob2z (.5-alpha)>>2.3263; 
+c=prop + z * sigma_bar>>0.112;
+z = zscore (c, .09, sigma_bar)>>1.2178;
+betagt (z)>>0.8883;
+
+
+z = (c-.11)/sigma_bar>>0.1093;
+betagt (z)>>0.5435;
+
+z = (c-.13) / sigma_bar>>-0.9993;
+betagt (z)>>0.1588;

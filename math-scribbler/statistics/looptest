@@ -1,0 +1,41 @@
+for (i=0 ; i < 5 ; i++) {
+	a=i;
+}
+a>>4;
+
+for (i = 0 ; i < 10 ; i++) {
+	a=i;
+	if (i == 7) {
+		break;
+	}
+}
+a>>9;
+
+a=true;
+if (a == true) {
+	b = 1;
+} else {
+	b = 2;
+}
+b>>1;
+
+a=false;
+if (a == true) {
+	b = 1;
+} else {
+	b = 2;
+}
+b>>2;
+b=4;
+b>>4;
+
+for (i = 0 ; i < 10 ; i++) {
+	for (j = 0 ; j < 10 ; j++) {
+		if ((i == 4) && (j == 2)) {
+			break;
+		}
+	}
+}
+
+i>>10;
+j>>10;

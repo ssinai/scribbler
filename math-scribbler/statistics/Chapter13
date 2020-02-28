@@ -1,0 +1,118 @@
+// Chapter 13
+
+# sqdiff (n1, s1, n2, s2) {
+	t1=s1^2 / n1;
+	t2=s2^2/n2;
+	return sqrt (t1+t2);
+}
+
+sqdiff (30, 3.5, 30, 3.4)>>0.8909;
+
+
+// confidence interval estimate
+# cie (a, x1, b,  c,  x2,  d, prob) {
+	s=sqdiff (a, b, c, d);
+	diff=x1-x2;
+	z=prob2z (prob);
+	arr=vector(2);
+	x=z*s;
+	arr[0]=diff - x;
+	arr[1]=diff + x;
+	return arr;
+}
+
+
+// Example 13.1
+cie (30, 12.3, 3.5, 30, 7.6, 3.4, .95/2)>>[2.9539, 6.4461];
+
+
+// Example 13.2
+cie (45, 36.52, 1.10, 35, 39.40, 1.23, .9/2)>>[-3.3155, -2.4445];
+
+
+// Example 13.3
+n1=1000; n2=1500;
+x1=22350000/n1>>22,350;
+x2=36187500/n2>>24,125;
+s1=sqrt (9600000000/(n1-1))>>3,099.937;
+s2=sqrt (15800000000/(n2-1))>>3,246.5921;
+cie (n1, x1, s1, n2, x2, s2, .99/2)>>[-2,107.2372, -1,442.7628];
+
+
+// Example 13.4
+x=sqrt(2*(2.5^2))>>3.5355;
+z=prob2z (.98/2)>>2.3263;
+n=(z*x)^2>>67.6487;
+n=(2.33*3.536)^2>>67.8791; // book value
+
+# alpha (val, mean, s) {
+	z=zscore (val, mean, s);
+	p = z2prob (z);
+	return .5-p;
+}
+
+
+// Example 13.5
+s=sqdiff (30, 2.3, 30, 2.3)>>0.5939;
+alpha (-1, 0, s)>>0.0461;
+
+
+// Example 13.6
+s=sqdiff (40, 1.2, 50, .65)>>0.2108;
+2* alpha (.5, 0, s)>>0.0177;
+
+
+// Example 13.7
+s = sqdiff (100, 2.5, 100, 2.3)>>0.3397;
+z = prob2z (.5-.05)>>1.6449;
+s*z>>0.5588;
+
+
+// Example 13.8
+s = sqdiff (35, 24.5, 38, 21.2)>>5.3831;
+z = prob2z (.5-.01/2)>>2.5758;
+s*z>>13.8659;
+
+
+// Example 13.9
+s = sqdiff (40, 37, 35, 43)>>9.3303;
+z = prob2z (.5-.1)>>1.2816;
+c = z * s>>11.9572;
+p=z2prob (10/9.33)>>0.3581;
+pvalue= .5-p>>0.1419;
+
+
+// Example 13.10
+s = sqdiff (200, .31, 300, .42)>>0.0327;
+z = prob2z (.5-.025)>>1.96;
+c = -z*s>>-0.0641;
+obs_diff=.7-.775>>-0.075; // 0.075 < c, so significant
+p = z2prob (obs_diff/s)>>0.4891;
+pvalue=2*(.5-p)>>0.0218;
+
+
+// Example 13.11 a
+n1=50; n2=60;
+xbar=90/n1>>1.8;
+ybar=144/n2>>2.4;
+s1=73.5/(n1-1)>>1.5;
+s2=94.4/(n2-1)>>1.6;
+s = sqdiff (n1, sqrt (s1), n2, sqrt(s2))>>0.238; // s1,s2 already squared
+z=prob2z (-.5+.02)>>-2.0537;
+c=s*z>>-0.4889;
+obs_diff=xbar-ybar>>-0.6; // obs_diff < c, so significant
+
+
+// Example 13.11 b
+p = z2prob (obs_diff/s)>>0.4941;
+pvalue=.5-p>>0.0059;
+
+
+// Example 13.12
+mu=125;
+s = sqdiff(30, 95, 30, 80)>>22.6752;
+z=prob2z (.5-.05)>>1.6449;
+c=mu+z*s>>162.2975;
+obs_diff=480-330>>150; // obs_diff < c, so not significant
+p = z2prob ((obs_diff-mu)/s)>>0.3649;
+pvalue=.5-p>>0.1351;

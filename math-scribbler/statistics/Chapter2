@@ -1,0 +1,50 @@
+// Chapter 2 - Variability
+
+//fraclen 0 1; // initial book examples go to 1 decimal place
+
+// Example  2.1
+rainfall = [1, 2, 4, 6, 18, 37, 31, 16, 28, 24, 9, 4];
+setData(rainfall);
+max()>>37;
+min ()>>1;
+range ()>>36;
+mean ()>>15;
+avgdev()>>10.6667;
+stdev()>>12.5191;
+pstdev()>>11.9861;
+pvar()>>143.6667;
+pvar(rainfall)>>143.6667;
+
+// Example 2.2
+hours_worked=[45,43, 41, 39, 39, 35, 37, 40, 39, 36, 37];
+setData(hours_worked);
+mean()>>39.1818;
+a=pvar()>>8.1488;
+isEquals(8.15, a)>>true;
+
+// Example 2.3
+X=[2, 9, 11, 22];
+Y=[5, 7, 15];
+Z=[-3, -5, -13, 4, 2, -6, 6, 4, -4, 17, 15, 7];
+//fraclen 0 2; // book examples go to 2 decimal places
+mean (X)>>11; pvar(X)>>51.5;
+mean (Y)>>9; pvar(Y)>>18.6667;
+mean (Z)>>2; pvar(Z)>>70.1667;
+
+// Example 2.4
+X=[3, 7, 15, 23];
+sum (X)>>48;
+sum (X^2)>>812;
+mean(X)>>12;
+pvar (X)>>59;
+
+// Example 2.5
+suspensions=[500,  650,  1350,  2300,  1450,  4000];
+setData(suspensions);
+mean()>>1,708.3333;
+pvar()>>1,396,180.5556;
+pstdev()>>1,181.6008;
+
+// Example 2.7 - Relative variability
+9000/45000>>0.2;
+7700/35000>>0.22;

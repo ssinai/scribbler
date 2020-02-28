@@ -1,0 +1,179 @@
+// Chapter 10
+
+//nc [-3,  -2,  -1,  0,  1,  2,  3]>>[0.000 1.000 0.607 0.135 0.011];
+
+// Example 10.1 a
+
+z = zscore(1650, 1500, 75)>>2;
+
+z2prob(1650, 1500, 75)>>0.4772;
+z2prob(2)>>0.4772;
+
+
+// Example 10.1 b
+z = zscore (1485, 1500, 75)>>-0.2;
+z2prob(z)>>0.0793;
+
+// Example 10.1 c
+
+p1=zscore(1416, 1500, 75)>>-1.12;
+p2=zscore(1677, 1500, 75)>>2.36;
+
+p1+p2>>1.24;
+
+zscore(1416, 1500, 75) + zscore(1677, 1500, 75)>>1.24;
+zscore(1416, 1500, 75) + 1>>-0.12;
+
+
+// Example 10.1 d
+z1 = zscore(1563, 1500, 75)>>0.84;
+z2 = zscore(1648, 1500, 75)>>1.9733;
+p1 = z2prob (z1)>>0.2995;
+p2 = z2prob (z2)>>0.4758;
+p2-p1>>0.1762;
+
+
+// Example 10.1 e
+z = zscore(1410, 1500, 75)>>-1.2;
+p = z2prob (z)>>0.3849;
+.5-p>>0.1151;
+
+// Example 10.2 a
+mu=16.1;
+sigma=0.04;
+p = zscore(16, mu, sigma)>>-2.5;
+p+.5>>-2;
+
+
+// Example 10.2 b
+z=prob2z(.4)>>1.2816;
+
+
+rawval(z, mu, sigma)>>16.1513;
+
+
+// Example 10.2 c
+z = prob2z(.3)>>0.8416;
+rawval(-z, mu, sigma)>>16.0663;
+
+
+// Example 10.2 d
+z = prob2z (.45)>>1.6449;
+rawval(-z, mu, sigma)>>16.0342;
+rawval (z, mu, sigma)>>16.1658;
+
+
+// Example 10.3 a
+mu = 70;
+sigma = 2.5;
+a = .95/2>>0.475;
+z = prob2z(a)>>1.96;
+rawval (-z, mu, sigma)>>65.1001;
+rawval (z, mu, sigma)>>74.8999;
+
+
+// Example 10.3 b
+z=prob2z(.4)>>1.2816;
+rawval (z, mu, sigma)>>73.2039;
+rawval (1.28, mu, sigma)>>73.2; // book value for 1.28
+
+
+// Example 10.3 c
+z = prob2z(-.49)>>-2.3263;
+rawval (z, mu, sigma)>>64.1841;
+rawval (-2.33, mu, sigma)>>64.175;  // book value for -2.33
+
+
+// Example 10.3 d
+100*2*z2prob(1)>>68.2689; // percentage of area between 1
+100*2*z2prob(2)>>95.45;     // percentage of area between 2
+100*2*z2prob(3)>>99.73;     // percentage of area between 3
+
+
+// Example 10.4
+mu = 25;
+z=prob2z(.32)>>0.9154;
+sigma = (29-mu)/z>>4.3698;
+(29-mu)/.92>>4.3478; // book example
+
+
+// Example 10.5
+z=prob2z (.29)>>0.8064;
+50+z*10>>58.0642;
+
+
+// Example 10.6
+coefficients =[1, -.84;1, -1.28];
+constants =[125,110];
+solve (coefficients, constants)>>
+	153.6364	34.0909
+;
+
+// Example 10.7
+binom (40, 5, .15)>>0.1692;
+
+
+mu=40*.15>>6;
+sigma = sqrt (mu*(1-.15))>>2.2583;
+z1=zscore(4.5, mu, sigma)>>-0.6642;
+z2=zscore (5.5, mu, sigma)>>-0.2214;
+p1=z2prob(z1)>>0.2467;
+p2=z2prob(z2)>>0.0876;
+p1-p2>>0.1591;
+p1=z2prob(-.66)>>0.2454; // book values
+p2=z2prob(-.22)>>0.0871;
+p1-p2>>0.1583;
+
+
+// Example 10.8
+p=.6;
+n=250;
+
+cumprob(n, 155, p)>>0.7605;
+
+mu=n*p>>150;  // book example follows
+sigma = sqrt (mu * (1-p))>>7.746;
+z=zscore(155.5, mu, sigma)>>0.71;
+p1=z2prob(z)>>0.2612;
+.5+p1>>0.7612;
+
+
+// Example 10.9
+p=.7;
+n=200;
+
+cumprob (200, 50, .3)>>0.0695;
+cumprob(200, 150, .7)>>0.9494;
+1-cumprob(200, 150, .7)>>0.0506;
+
+a=fillBy(51,1);
+a>>0.475;
+b=a+150;
+b>>150.475;
+binom(n,b,p)>>0;
+
+/*
+a = fill  150 51 1>>[150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200];
+binom n a p>>0.0695;
+*/
+mu=n*p>>140;  // book example follows
+sigma = sqrt (mu * (1-p))>>6.4807;
+z = zscore (150, mu, sigma)>>1.543;
+p1 = z2prob (z)>>0.4386;
+.5-p1>>0.0614;
+z=zscore (149.5, mu, sigma)>>1.4659;  // estimated value from book
+p1=z2prob (z)>>0.4287;
+.5-p1>>0.0713;
+
+
+// Example 10.10
+n=130;
+p=.04;
+mu=n*p>>5.2;
+sigma = sqrt (mu * (1-p))>>2.2343;
+a=fillby (4, 1)>>[0, 1, 2, 3];
+binom(n, a, p)>>0.2323;  // binom answer
+sum (pois (mu, a))>>0.2381;  // poisson approx.
+z= zscore (3.5, mu, sigma)>>-0.7609;
+p1 = z2prob (z)>>0.2766;
+.5-p1>>0.2234; // normal approx.

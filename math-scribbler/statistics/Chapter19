@@ -1,0 +1,134 @@
+// Chapter 19
+
+// Example 19.1 a
+n=500; df=3; probs=[.3, .25, .2, .25];
+expected=probs*n>>[150, 125, 100, 125];
+
+
+// Example 19.1 b
+observed=[139, 138, 112, 111];
+chisum (observed, expected)>>5.1667;
+
+chi (df, .1)>>6.2514; // 5.1667 < 6.2514, so cannot reject
+chi (df, .2)>>4.6416; // 5.1667 > 4.6414, so reject
+
+
+// Example 19.2
+n=4000; df=3; probs=[1/16,  3/16,  3/16,  9/16];
+expected = probs * n>>[250, 750, 750, 2,250];
+observed=[226, 764, 733, 2277];
+chisum (observed, expected)>>3.2747;
+chi (df, .1)>>6.2514;  // 3.2747 < 6.2514, so cannot reject
+
+
+// Example 19.3 - uniform distribution
+n=5; df=4; observed=[43, 29, 52, 34, 48];x=sum (observed)/n;
+expected = vector(5);
+x>>41.2;
+expected = set(expected, x)>>[41.2, 41.2, 41.2, 41.2, 41.2];
+chisum (observed, expected)>>8.9029;
+chi (df, .05)>>9.4877;  // 8.9029 < 9.4877, so cannot reject
+chi (df, .1)>>7.7794; // 8.9029 > 7.7794, so reject
+
+
+// Example 19.4 - uniform distribution
+n=3; df=2; observed=[62, 43, 45];x=sum (observed)/n;
+expected = vector(3);
+expected = set (expected, x)>>[50, 50, 50];
+chisum (observed, expected)>>4.36;
+chi (df, .025)>>7.3778; // 4.36 < 7.3778, so cannot reject
+
+
+// Example 19.5 - binomial distribution
+n=800; df=3; observed=[434, 329, 35, 2];
+expected=binomdist (3, .2)>>[0.512, 0.384, 0.096, 0.008];
+expected = expected * n>>[409.6, 307.2, 76.8, 6.4];
+chisum (observed, expected)>>28.776;
+chi (df, .01)>>11.3449; // 28.776 > 11.3449, so reject
+
+
+# pbar (arr1, arr2, n) {
+	p_bar = arr1 * arr2;
+	return sum (p_bar) /n;
+}
+
+
+// Example 19.6 - binomial distribution
+n=200; df=3; observed=[13, 36, 72, 56, 23]; days=[0, 1, 2, 3, 4];
+total_flights=800; // 4 days * 200 flights per day
+p_bar = pbar (observed, days, total_flights)>>0.55;
+expected=binomdist (4, p_bar)>>[0.041, 0.2005, 0.3675, 0.2995, 0.0915];
+expected = expected * n>>[8.2012, 40.095, 73.5075, 59.895, 18.3013];
+chisum (observed, expected)>>4.7167;
+chi (df, .05)>>7.8147; // 4.7167 < 7.8147, so cannot reject
+
+
+#poisdist (mu, arr, n) {
+	expected = pois (mu, arr);
+	expected = subset (0, dim (arr)-1, expected);
+	expected = append (expected, 1-sum(expected));
+	return (expected * n);
+}
+
+// Example 19.7 - poisson
+n=450; observed = [60, 110, 125, 88, 67]; df=4;
+expected = poisdist (2.1, [0, 1, 2, 3, 4], n)>>[55.1054, 115.7213, 121.5074, 85.0552, 72.6107];
+chisum (observed, expected)>>1.3535; // slightly different from book value due to rounding
+chi (df, .025)>>11.1433; // 1.3535 < 11.1433, so cannot reject
+
+// test against book value of 1.430
+chisum (observed, [54.9, 115.65, 121.5, 85.05, 72.9])>>1.4304;
+
+
+// Example 19.8 - poisson
+observed = [29, 38, 24, 18, 10, 3];  // typo in book should be 10, not 13
+n=125;
+errors = fillby(6,1);
+errors>>[0, 1, 2, 3, 4, 5];
+p_bar = pbar(observed, errors, n)>>1.56;
+expected = poisdist (p_bar, errors, n)>>[26.267, 40.9765, 31.9617, 16.6201, 6.4818, 2.6928];
+
+// book type, use 13 instead of 10 to match book answer
+chisum ([29, 38, 24, 18, 13, 3], expected)>>9.1882; 
+chi (4, .1)>>7.7794; // 9.1822 > 7.7794  so reject
+
+// check against book values to avoid problems with typos in book
+chisum( [29, 38, 24, 18, 13, 3], [26.25, 41, 32, 16.625, 6.5, 2.625])>>9.1749;
+
+
+// Example 19.9 - normal
+n=225; observed=[25, 61, 70, 59, 10];
+p1=z2prob (.5)>>0.1915;
+p2 =z2prob (1.5) - z2prob (.5)>>0.2417;
+p3 = .5-(p1+p2)>>0.0668;
+expected = [p3*n,  p2*n,  2*p1*n,  p2*n,  p3*n]>>[15.0316, 54.3893, 86.1581, 54.3893, 15.0316];
+chisum (observed, expected)>>12.5195;
+chi (4, .025)>>11.1433;  // 12.5195 > 11.1433  so reject
+chi (4, .01)>>13.2767; // 12.5195 < 13.2767  so cannot reject
+
+
+// Example 19.10 - normal
+n=300; observed = [15, 39, 87, 96, 48, 15];
+p1=z2prob (1)>>0.3413;
+p2 = z2prob (2) - p1>>0.1359;
+p3 = .5-(p1+p2)>>0.0228;
+expected = [p3, p2, p1, p1, p2, p3]>>[0.0228, 0.1359, 0.3413, 0.3413, 0.1359, 0.0228];
+expected = expected * n>>[6.825, 40.7715, 102.4034, 102.4034, 40.7715, 6.825];
+chisum (observed, expected)>>23.6597;
+chi (3, .01)>>11.3449; // 23.6597 > 11.3449, so reject
+
+
+// Example 9.11 a
+observed = [988,  991, 1010,  990,  1013,  1008];
+expected =vector(6);
+expected = set(expected, 1000)>>[1,000, 1,000, 1,000, 1,000, 1,000, 1,000];
+chisum (observed, expected)>>0.658;
+chi (5, .01)>>15.0863; // cannot reject
+chi (5, .05)>>11.0705; // cannot reject
+chi (5, .1)>>9.2364; // cannot reject
+
+// Example 9.11 b
+chi (5, .9)>>1.6103; // cannot reject
+chi (5, .95)>>1.1455; // cannot reject
+chi (5, .975)>>0.8312; // cannot reject
+chi (5, .99)>>0.5543; // reject

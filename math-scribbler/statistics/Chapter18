@@ -1,0 +1,129 @@
+// Chapter 18
+
+#sigma_d (p1, n1, p2, n2) {
+	t1 = p1 * (1-p1) / n1;
+	t2 = p2 * (1-p2) / n2;
+	return sqrt (t1 + t2);
+}
+
+
+#ci_d (p1, n1, p2, n2, pr) {
+	s=sigma_d (p1, n1, p2, n2);
+	odiff=p1-p2;
+	z=prob2z (pr);
+	return cint (z, odiff,  s);
+}
+
+
+// Example 18.1
+s=sigma_d (.84, 125, .72, 150)>>0.0492;
+a=.84-.72>>0.12;
+b = prob2z(.45)>>1.6449;
+c = cint(b,a, s)>>[0.0391, 0.2009];
+
+interval=ci_d (.84, 125, .72, 150, .9/2)>>[0.0391, 0.2009];
+z>>1.6449; s>>0.0492;
+z*s>>0.0809;
+1.645 * .0492>>0.0809; // book value is .081
+
+
+// Example 18.2
+n1=85; n2=92; p1=10/n1; p2=37/n2;
+ci_d (p1, n1, p2, n2, .95/2)>>[-0.4059, -0.1632];
+z>>1.96; s>>0.0619;
+z*s>>0.1214;
+1.95 * .0619>>0.1207; // book value is .121
+
+
+// Example 18.3
+n1=800; p1=460/n1; n2=1000; p2=520/n2;
+z=prob2z(.5-.1)>>1.2816;
+s=sigma_d(p1, n1, p2, n2)>>0.0236;
+odiff = p1 - p2;
+cdiff=z*s>>0.0302;
+odiff>>0.055;
+1.28*.0236>>0.0302;  // book value for cdiff
+z=odiff / s>>2.3345;
+x=z2prob (z)>>0.4902;
+p_value=.5-x>>0.0098; // book value=.0099
+
+
+
+// Example 18.4 a
+#sigma_h (p1, n1, p2, n2) {
+	x1 = p1/n1; 
+	x2 = p2/n2;
+	p = (p1+p2) / (n1+n2);
+	return sqrt ((p * (1-p))*(1/n1+1/n2));
+}
+
+
+#ci_h (p1, n1, p2, n2, pr) {
+	s=sigma_h (p1, n1, p2, n2);
+	odiff= (p1/n1)-(p2/n2);
+	z=prob2z (pr);
+	return cint(z, 0, s);
+}
+
+
+#diff_infoa (x1, n1, x2, n2, pr) {
+	pb1=x1/n1;
+	pb2=x2/n2;
+	s = sigma_d (pb1, n1, pb2, n2);
+	odiff=pb1-pb2; 
+	z=prob2z (pr);
+	return z;
+}
+
+
+#diff_infob (x1, n1, x2, n2, pr) {
+	pb1=x1/n1; 
+	pb2=x2/n2;
+	p=(x1+x2) / (n1+n2);
+	s=sqrt ((p * (1-p))*(1/n1+1/n2));
+	odiff=pb1-pb2; 
+	z=prob2z (pr);
+	return z;
+}
+
+
+ci_h (28, 350, 32, 500, .5-.06/2)>>[-0.0336, 0.0336];
+s>>0.0179; x1>>0.08; x2>>0.064;p>>0.0706;
+z>>1.8808; x=s*z>>0.0336; odiff>>0.016;
+
+
+// Example 18.4 b
+z=(0-odiff)/s>>-0.8963;
+p_value=.5-z2prob (z)>>0.185;
+2*p_value>>0.3701;  
+p_value = .5 - z2prob (.89)>>0.1867;
+2 * p_value>>0.3735; // book value.3734
+
+
+// Example 18.5 a
+m=[312, 520, 472, 610, 1026];
+w=[128, 350, 391, 400, 791];
+msum = sum (m); wsum = sum (w);
+diff_infoa (m[0], msum, w[0], wsum, .95/2);
+odiff>>0.044; s>>0.0078;z>>1.96;z*s>>0.0153; odiff + z*s>>0.0592; odiff-z*s>>0.0287;
+odiff + [-z*s,  z*s]>>[0.0287, 0.0592];
+
+
+// Example 18.5 b
+diff_infob (m[1], msum, w[1], wsum, .5-.02/2);
+odiff>>0.007;z>>2.3263; s>>0.0109; interval =(z*s)*[1, -1]>>[0.0253, -0.0253];
+between (interval, odiff)>>true; // between critical values, so cannot reject
+
+
+// Example 18.5 c
+diff_infob (w[2], wsum, m[2], msum, .5-.005);
+odiff>>0.0293; z>>2.5758; s>>0.0109; p>>0.1726; 
+cdiff=z*s>>0.028; // odiff > cdiff, so reject
+
+
+// Example 18.6
+#sampsize (z, error) {
+	ceil ((z * .5 * sqrt (2)/error)^2);
+}
+z=prob2z (.95/2)>>1.96;
+s=sampsize (z, .02)>>4,802;

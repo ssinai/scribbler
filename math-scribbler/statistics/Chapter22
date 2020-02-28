@@ -1,0 +1,67 @@
+// Chapter 22
+
+// Example 22.1
+x=[38, 53, 42, 47];
+y=[45, 86, 58, 61];
+
+#calc (slope, x,yint)  {
+	 y1=x*slope;
+	return yint+y1;
+}
+
+
+
+setRegression (x, y)>>[2.5476, -52.1429];
+slope=regr_slope()>>2.5476;
+yint = regr_yint()>>-52.1429;
+
+y2=calc (slope, x, yint)>>[44.6667, 82.881, 54.8571, 67.5952];
+
+vary = pvar(y)>>220.25;
+vary2 = pvar (y2)>>204.4464;
+r = sqrt (vary2/vary)>>0.9635;
+
+
+// Example 22.2
+x=[25, 23, 30, 25, 20, 33, 18, 21, 22, 30, 26, 26, 27, 29, 20];
+y=[10, 11, 14, 12, 8, 18, 9, 10, 10, 15, 11, 15, 12, 14, 11];
+setRegression (x, y)>>[0.5492, -1.7311];
+
+slope = regr_slope()>>0.5492;
+yint = regr_yint()>>-1.7311;
+y2 = calc (slope, x, yint)>>[12.0, 10.9015, 14.7462, 12.0, 9.2538, 16.3939, 8.1553, 9.803, 10.3523, 14.7462, 12.5492, 12.5492, 13.0985, 14.197, 9.2538];
+vary = pvar (y)>>6.8;
+vary2 = pvar (y2)>>5.3093;
+r = sqrt (vary2/vary)>>0.8836;
+
+
+// Example 22.3
+x=[25, 32, 20, 28, 15, 34, 29, 30, 45, 35];
+y=[69, 81, 72, 75, 64, 89, 84, 73, 92, 86];
+
+dim(x)>>10; dim(y)>>10;
+setRegression (x, y)>>[0.9974, 49.2756];
+
+slope = regr_slope()>>0.9974;
+yint = regr_yint()>>49.2756;
+y2 = calc (slope, x, yint)>>[74.2111, 81.193, 69.224, 77.2034, 64.2369, 83.1879, 78.2008, 79.1982, 94.1595, 84.1853];
+
+
+// Example 22.3 c
+slope * 40 + yint>>89.1724;
+vary = pvar (y)>>77.05;
+vary2 = pvar (y2)>>61.6904;
+r = sqrt (vary2/vary)>>0.8948;
+df=8;
+num = r * sqrt (df)>>2.5309;
+
+denom = sqrt (1-r^2)>>0.4465;
+t = num/denom>>5.6684;
+critical = tinv (df, 1-(.05/2))>>2.306;  // t > critical  so reject hypotheses of correlation
+
+r = .985;
+df = 5;
+num=r * sqrt (5)>>2.2025;
+denom = sqrt (1 - r^2)>>0.1726;
+t=num/denom>>12.7643;
+critical = tinv (5, 1-(.05/2))>>2.5706; // t > critical  so reject hypothese of correlation

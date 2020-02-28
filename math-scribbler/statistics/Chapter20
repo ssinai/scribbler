@@ -1,0 +1,64 @@
+// Chapter 20 - Chi-squared test for independence
+
+// Example 20.1 a
+observed=[100, 50 ; 150, 125 ; 50, 25]>>;
+
+expected=contable ([150, 275, 75], [300,  200])>>;
+
+chisum (observed, expected)>>;
+chi (2, .01)>>; // 7.5758 < 9.2103, so cannot reject independence
+
+
+// Example 20.1 b
+chi (2, .025)>>;  // 7.3773 > 7.5758, so reject independence
+
+
+// Example 20.2
+#getdf (row, col) {
+	return (dim (row)-1)*(dim (col)-1);
+}
+
+
+observed=[175, 220, 55 ; 150, 165, 35 ; 75, 105, 20]>>;
+
+
+row(observed,0)>>;
+row(observed,1)>>;
+row(observed,2)>>;
+
+democrats = observed[0]>>;
+republicans = observed[1]>>;
+independents = observed[2]>>;
+
+// test transpose and matrix indexing to make sure row retrieval is ok
+atrans = observed';
+atrans>>;
+
+atrans[0]>>;
+atrans[1]>>;
+atrans[2]>>;
+
+
+yes = col (observed, 0)>>;
+no = col (observed, 1)>>;
+no_opinion = col (observed, 2)>>;
+
+
+col = coltotals(observed)>>;
+row = rowtotals (observed)>>;
+
+expected = contable (row, col)>>;
+chisum (observed, expected)>>;
+
+df = getdf (row, col)>>;
+chi (df, .1)>>;// 3.0243 < 7.7794, so cannot reject independence
+
+
+// Example 20.3
+observed = [85, 125, 150 ; 40, 95, 145]>>;
+col = coltotals (observed)>>;
+row = rowtotals (observed)>>;
+expected = contable (row, col)>>;
+df = getd (row, col)>>;
+chisum (observed, expected)>>;
+chi (df, .05)>>; // 10.5403 > 5.9915, so reject independence

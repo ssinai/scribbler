@@ -1,0 +1,21 @@
+// Chapter 21
+
+// Example 21.1
+a=setRegression ([38,53,42,47], [45, 86, 58, 61]);
+a>>[2.5476, -52.1429];
+regr_slope()>>2.5476;
+regr_yint()>>-52.1429;
+regr_predict(50)>>75.2381;
+
+// Example 21.2
+x=[25, 23, 30, 25, 20, 33, 18, 21, 22, 30, 26, 26, 27, 29, 20];
+y=[10, 11, 14, 12, 8, 18, 9, 10, 10, 15, 11, 15, 12, 14, 11];
+dim(x)>>15;  dim(y)>>15;
+setRegression (x, y)>>[0.5492, -1.7311];
+regr_predict (24)>>11.4508;
+
+// Example 21.3
+advertising = [2.3,  5.7,  4.8,  7.3,  5.9,  6.2];
+total_sales = [77,  105,  96,  118 , 102,  95];
+setRegression (advertising, total_sales)>>[7.295, 59.6835];
+regr_predict (5)>>96.1585;

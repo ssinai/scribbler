@@ -1,0 +1,72 @@
+// Chapter 16
+
+#sigmap (p, n) {
+	return sqrt (p * (1-p) / n);
+}
+
+#pprop (x, p, n) {
+	sgp = sigmap (p, n);
+	z = zscore (x, p, sgp);
+	return z2prob (z);
+}
+
+#propci (pbar, n, p) {
+	sgp = sigmap (pbar, n);
+	z = prob2z (p);
+	return cint(z, pbar, sgp);
+}
+
+// Example 16.1
+sigmap(.7, 100)>>0.0458;
+p = pprop (.8, .7, 100)>>0.4855;
+.5-p>>0.0145;
+
+// Example 16.2
+propci (.64, 550, .99/2)>>[0.5873, 0.6927];
+
+// Example 16.3
+propci (18/225, 225, .95/2) >>[0.0446, 0.1154];
+
+// Example 16.4 a
+c = propci (832/1000, 1000, .4945)>>[0.8019, 0.8621];
+
+// Example 16.4 b
+c*191000000>>[153,170,245.8542, 164,653,754.1458];
+
+// Example 16.5 a
+men=[1090,  337, 1168,  266, 135,  503];
+women=[952, 423, 632, 189, 186, 349];
+a=men[0]+men[3]>>1,356;
+b=sum (men)>>3,499;
+pbar=a/b>>0.3875;
+s=sigmap (pbar, b)>>0.0082;
+interval=propci (pbar, b, .9/2)>>[0.374, 0.4011];
+range (interval / 2)>>0.0135;
+
+// Example 16.5 b
+singles = 1168+632+503+349>>2,652;
+single_women=632+349>>981;
+pbar = single_women / singles>>0.3699;
+s=sigmap (pbar, singles)>>0.0094;
+interval = propci (pbar, singles, .98/2)>>[0.3481, 0.3917];
+range (interval / 2)>>0.0218;
+
+// Example 16.6
+pr = .15;
+s=sigmap (pr, 50)>>0.0505;
+z=prob2z (-.4)>>-1.2816;
+c = pr + z * s>>0.0853;
+
+// Example 16.7
+samplesize (2.05, .5, .03)>>1168;
+
+// Example 16.8
+z = prob2z (.99/2)>>2.5758;
+samplesize (z, .5, .06)>>461;
+samplesize (z, .5, .03)>>1844;
+samplesize (z, .5, .02)>>4147;
+
+z=2.58>>2.58;  // book values
+samplesize (z, .5, .06)>>463;
+samplesize (z, .5, .03)>>1850;
+samplesize (z, .5, .02)>>4161;
