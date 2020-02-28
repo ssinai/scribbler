@@ -1,0 +1,82 @@
+// Chapter 11
+
+// Example 11.1
+sbar=420/sqrt(100)>>42;
+z=zscore (700, 650, sbar)>>1.1905;
+p=z2prob(z)>>0.3831;
+.5-p>>0.1169;
+
+// Example 11.2 a
+sbar=0.12/sqrt(32)>>0.0212;
+z=prob2z (.95/2)>>1.96;
+ci (z, 16.1, sbar)>>[16.0584, 16.1416];
+a=ci(1.96, 16.1, .02)>>[16.0608, 16.1392]; // book value
+
+// Example 11.2 b
+z=prob2z (.99/2)>>2.5758;
+ci(z, 16.1, .02)>>[16.0485, 16.1515];
+b=ci(2.56, 16.1, .02)>>[16.0488, 16.1512]; // book value
+
+
+range(a)>>0.0784;
+range(b)>>0.1024; // higher confidence interval means larger range
+
+// Example 11.3 a
+mu = 12.35; v=5.76; n = 64;
+sigma = sqrt(v)>>2.4;
+sbar=sigma / sqrt(n)>>0.3;
+z = prob2z (.9/2)>>1.6449;
+a=ci (z, mu, sbar)>>[11.8565, 12.8435];
+
+
+// Example 11.3 b
+n = 100;
+sbar = sigma / sqrt(n)>>0.24;
+b=ci (z, mu, sbar)>>[11.9552, 12.7448];
+ra=range(a)>>0.9869;
+rb=range (b)>>0.7895;
+ra/2>>0.4935; // smaller sample size means larger range for confidence interval
+rb/2>>0.3948;
+
+
+// Example 11.4 a
+n=50; mu=5.32; sigma=2.49;
+sbar=sigma/sqrt(n)>>0.3521;
+z = prob2z (.95/2)>>1.96;
+ci (z, mu, sbar)>>[4.6298, 6.0102];
+
+// Example 11.4 b
+z=.75/sbar>>2.1298;
+p=z2prob(z)>>0.4834;
+(p*2)*100>>96.6815; // confidence interval estimate
+
+
+// Example 11.5
+n=500;
+xbar=16475/n>>32.95;
+s=sqrt(48907/(n-1))>>9.9;
+sbar=s / sqrt(n)>>0.4427;
+z=prob2z (.98/2)>>2.3263;
+ci (z, xbar, sbar)>>[31.92, 33.98];
+
+
+// Example 11.6
+n=250; xbar=3540; s=1150;
+sbar = s/sqrt(n)>>72.7324;
+z=prob2z (.99/2)>>2.5758;
+interval=ci(z, xbar, sbar)>>[3,352.6538, 3,727.3462];
+125000 * interval>>[419,081,723.5438, 465,918,276.4562];
+125000 * [3540-187.64,  3540+187.64]>>[419,045,000, 465,955,000]; // book value
+
+
+// Example 11.7
+samplesize(2.58, .025, .01)>>42;
+
+// Example 11.8
+samplesize(1.96, 147.65, 50)>>34;
+
+// Example 11.9
+n1 = 3 * sqrt(100) / 1.5>>20;
+n1 ^ 2>>400;
+n2 = 3 * sqrt(100) / 1>>30;
+n2 ^ 2>>900;

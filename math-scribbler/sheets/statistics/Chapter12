@@ -1,0 +1,166 @@
+// Chapter 12
+
+# alpharisk (mu, c, sigma, n) {
+	sbar=sigma / sqrt (n);
+	z=zscore (c, mu, sbar);
+	p=z2prob (z);
+	return .5-p;
+}
+
+// Example 12.1
+mu = 8; c = 7.75; sigma = 0.9; n=36;
+sbar = sigma / sqrt (36)>>0.15;
+z = zscore (c, mu, sbar)>>-1.6667;
+p=z2prob(z)>>0.4522;
+.5 - p>>0.0478;
+
+alpharisk (8, 7.75, 0.9, 36)>>0.0478;
+alpharisk (mu, c, sigma, n)>>0.0478;
+
+// Example 12.2
+alpharisk (2000, 2100, 350, 30)>>0.0588;
+
+
+// Example 12.3
+a = alpharisk(15, 13, 12, 42)>>0.14;
+2*a>>0.2801; // double value since two-tailed test
+
+# critical (alpha, sigma, n) {
+	sbar = sigma / sqrt (n);
+	return prob2z (.5-alpha);
+}
+
+// Example 12.4
+mu=50; alpha=.05; sigma=2.3; n=30;
+z= critical(alpha, sigma, n)>>1.6449;
+rawval (-z, mu, sbar)>>49.3093;
+
+
+// Example 12.5
+mu=30; alpha=.01; sigma=8; n=100;
+z = critical (alpha/2, sigma, n)>>2.5758;
+rawval (-z, mu, sbar)>>27.9393; // reject if sample mean lower than
+rawval (z, mu, sbar)>>32.0607;  // reject if sample mean higher than
+
+
+// Example 12.7 a
+mu = 48.3; sigma = 15.4; n = 30; alpha = .1;
+//sbar= sigma / (sqrt n)>>2.8116;
+z = critical (alpha, sigma, n)>>1.2816;
+rawval (-z, mu, sbar)>>44.6967;
+
+
+// Example 12.7 b
+z = zscore (45.4, mu, sbar)>>-1.0314;
+p=z2prob (z)>>0.3488;
+.5-p>>0.1512;
+
+
+// Example 12.8 a
+mu=6.5; xbar=7; sigma=1.4; alpha=.05; n=50;
+critical_z = critical (alpha, sigma, n)>>1.6449;
+sbar>>0.198;
+c=rawval (critical_z, mu, sbar)>>6.8257; // 7 > c, so reject Ho
+z=zscore (xbar, mu, sbar)>>2.5254;  // z > critical_z, so reject Ho
+
+
+critical_z = critical (0.01, sigma, n)>>2.3263;
+sbar>>0.198;
+c = rawval (critical_z, mu, sbar)>>6.9606; // 7 > c, so reject Ho
+z=zscore (xbar, mu, sbar)>>2.5254; // z > critical_z, so reject Ho
+
+
+// Example 12.8 b
+z = zscore (7, 6.5, sbar)>>2.5254;
+p = z2prob (z)>>0.4942;
+.5-p>>0.0058;
+
+
+// Example 12.9
+mu=12250;alpha=.05;sigma=3180;n=135;
+z = critical (alpha/2, sigma, n)>>1.96;
+sbar>>273.6908;
+rawval (-z, mu, sbar)>>11,713.5758;
+rawval (z, mu, sbar)>>12,786.4242; // 11500 outside critical range, so reject
+z=zscore (11500, mu, sbar)>>-2.7403; // less than -critical z, so reject
+p=z2prob (z)>>0.4969;
+2*(.5-p)>>0.0061; // two tail test, so double value
+
+
+// Example 12.10
+n=250; sumx=14875; sumdiff=17155; mu=58.4;
+xbar=sumx/n>>59.5;
+s=sqrt (sumdiff/(n-1))>>8.3003;
+sbar=s/sqrt (n)>>0.525;
+z=prob2z (.5-.05)>>1.6449;
+rawval (-z, mu, sbar)>>57.5365;
+rawval (z, mu, sbar)>>59.2635;  // 59.5 outside critical range, so reject
+z = zscore (59.5, mu, sbar)>>2.0954;
+p=z2prob (z)>>0.4819;
+2*(.5-p)>>0.0361;  // two tail test, so double value
+
+
+// Example 12.11
+mu=47; sigma=27; n=225;
+sbar=sigma / sqrt (n)>>1.8;
+z=zscore (50, 48, sbar)>>1.1111;
+p=z2prob (z)>>0.3667;
+beta_risk=.5+p>>0.8667;
+z=zscore (50, 51, sbar)>>-0.5556;
+p = z2prob (z)>>0.2107;
+beta_risk=.5-p>>0.2893;
+
+
+// Example 12.12 a
+critical_z = critical (.01, 5.8, 50)>>2.3263;
+val=rawval (-critical_z, 24, .82)>>22.0924;
+
+
+// Example 12.12b
+z = zscore (22.09, 22, .82)>>0.1098;
+p=z2prob (z)>>0.0437;
+beta_risk=.5-p>>0.4563;
+
+z=zscore (22.09, 20, .82)>>2.5488;
+p=z2prob (z)>>0.4946;
+beta_risk = .5-p>>0.0054;
+
+
+// Example 12.13 a
+critical_z = critical (.05, 3.2, 400)>>1.6449;
+sbar>>0.16;
+rawval (-critical_z, 4.3, sbar)>>4.0368;
+critical_z = critical (.01, 3.2, 400)>>2.3263;
+sbar>>0.16;
+rawval (-critical_z, 4.3, sbar)>>3.9278;
+
+
+// Example 12.13 b
+z = zscore (4.037, 4.2, sbar)>>-1.0188;
+p = z2prob (z)>>0.3458;
+beta_risk = .5+p>>0.8458;
+z = zscore (3.927, 4.2 , sbar)>>-1.7063;
+p=z2prob (z)>>0.456;
+beta_risk = .5+p>>0.956;
+
+
+// Example 12.14 a
+sbar=150 / sqrt (100)>>15;
+z=zscore (375, 350, sbar)>>1.6667;
+p=z2prob (z)>>0.4522;
+alpha_risk=.5-p>>0.0478;
+
+sbar=150 / sqrt (200)>>10.6066;
+z=zscore (375, 350, sbar)>>2.357;
+p=z2prob (z)>>0.4908;
+alpha_risk=.5-p>>0.0092;
+
+
+// Example 12.14 b
+z=zscore (375, 385, 15)>>-0.6667;
+p=z2prob (z)>>0.2475;
+beta_risk = .5 - p>>0.2525;
+
+z=zscore (375, 385, 10.6)>>-0.9434;
+p=z2prob (z)>>0.3273;
+beta_risk = .5 - p>>0.1727;

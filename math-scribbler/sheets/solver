@@ -1,0 +1,19 @@
+coefficients =[2,3,-2;-1,7,6;4,-3,-5];
+coefficients >>
+	2	3	-2
+	-1	7	6
+	4	-3	-5
+;
+
+constants = [1,-2,1];
+constants>>[1, -2, 1];
+
+solve (coefficients, constants)>>
+	-0.3699	0.1781	-0.6027
+;
+
+c=[1, -.84;1, -1.28];
+cn=[125,110];
+solve (c, cn)>>
+	153.6364	34.0909
+;

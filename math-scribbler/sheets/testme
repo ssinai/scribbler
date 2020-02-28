@@ -1,0 +1,14 @@
+#testme (x) {
+	y=x+1; 
+	if (false) {
+		return 10;
+	} else {
+		return 20;
+	}
+	zm=y+2;
+}
+
+z=testme(3)>>20;
+z>>20;
+y>>4;
+zm>>0;

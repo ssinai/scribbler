@@ -1,0 +1,31 @@
+// Chapter 5 - Counting
+
+// Example 5.4
+perm(10, 3)>>720;
+
+// Example 5.5
+perm(9, 4)>>3024;
+
+// Example 5.6
+comb(6,2)>>15;
+
+// Example 5.7
+comb(10, 3)>>120;
+
+// Example 5.8
+comb(9, 4)>>126;
+
+// Example 5.9
+comb(7, 4)>>35;
+comb(12,10)>>66;
+comb(20,4)>>4845;
+comb(57,1)>>57;
+comb(6,0)>>1;
+comb(10,10)>>1;
+comb(23,22)>>23;
+
+// Example 5.10
+comb(8, 3)>>56;
+comb(8, 4)>>70;
+comb(15, 9)>>5005;
+comb(15, 10)>>3003;

@@ -1,0 +1,3 @@
+A=[1,2;3,4];
+B=[0,0;0,0];
+C=[A,B]>>java.lang.String cannot be cast to parser.ScribMatrix at index=36;

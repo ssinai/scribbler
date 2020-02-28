@@ -1,0 +1,4 @@
+a=1>>;
+#testme (x,y) { z = x + y; return z;}
+x=testme(4,6);
+x>>;

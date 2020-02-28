@@ -1,0 +1,17 @@
+mat1=[1,2,3;4,5,6];
+mat1>>
+	1	2	3
+	4	5	6
+;
+a = map v1=[10, 20, 30] labels=["A",  "B", "C"] title="Pie Chart";
+a>>{v1=[10, 20, 30], title=Pie Chart, labels=[A, B, C]};
+piechart (a)>>
+ ;
+
+
+d1 = [-.0315,.0159,.0306, .0453 ,.0557];
+d2 = [.1931,.1457, .1310,.1163, .1059];
+ib_map = map lows=d1 highs=d2 title="Interval Bar Chart" xtitle="xtitle" ytitle="ytitle" width=350 height=280;
+ib_map>>{title=Interval Bar Chart, lows=[-0.0315, 0.0159, 0.0306, 0.0453, 0.0557], height=280.0, xtitle=xtitle, width=350.0, ytitle=ytitle, highs=[0.1931, 0.1457, 0.131, 0.1163, 0.1059]};
+int_barchart(ib_map)>>
+ ;

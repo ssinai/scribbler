@@ -1,0 +1,49 @@
+len=50;
+
+radians=vector(len);
+for (i = 0 ; i < dim(radians); i++) {
+	radians[i] = i * .2;
+}
+
+//radians = fillby(len, .2);
+
+y1 = sin(radians);
+y2 = cos(radians);
+
+m=[y1];
+
+w=1100;
+h=280;
+
+bar_map = map matrix=m width=w height=h title="Sin Chart" xtitle="xtitle" ytitle="ytitle";
+
+linegraph(bar_map)>>
+ ;
+
+
+m=[y2];
+bar_map = map matrix=m width=w height=h title="Cos Wave" xtitle="xtitle" ytitle="ytitle";
+linegraph(bar_map)>>
+ ;
+
+
+// calculate area of triangle with determinant
+
+A = [2,4,1;9,6,1;7,-3,1];
+
+#area (mat) {
+	d = det(mat);
+	d /= 2;
+	return abs(d);
+}
+
+a = area(A)>>29.5;
+
+
+// Solve a system of equations
+
+coefficients = [2, 3, -2; -1, 7, 6; 4, -3, -5];
+constants = [1, -2, 1];
+solve(coefficients, constants)>>
+	-0.3699	0.1781	-0.6027
+;
